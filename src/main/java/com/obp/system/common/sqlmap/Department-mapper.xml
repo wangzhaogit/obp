@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Department">
+	<resultMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+    
+	<select id="searchSysDepartmentByDeptId" parameterType="String" resultMap="dto">
+		SELECT * FROM SYS_DEPARTMENT WHERE DEPT_ID = #{DEPT_ID}
+	</select>
+	
+</mapper>

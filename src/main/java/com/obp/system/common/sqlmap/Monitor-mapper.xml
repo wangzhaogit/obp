@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Monitor">
+	<parameterMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+	<resultMap type="com.obp.system.web.vo.UserInfoVO" id="resultUserInfo" />
+	
+	<select id="queryHttpSessionsBySessionId" parameterType="String" resultMap="resultUserInfo">
+		 SELECT 
+			SESSION_ID AS "sessionId", USER_ID AS "userId", USER_NAME AS "userName", CREATE_TIME AS "sessionCreatedTime",
+				EXPLORER AS "explorer", LOGIN_IP AS "loginIP"
+	      FROM SYS_HTTP_SESSION where SESSION_ID = #{SESSION_ID}
+	</select>
+	
+	<delete id="deleteHttpSession" parameterMap="dto" >
+		DELETE FROM SYS_HTTP_SESSION
+		<where>
+	      	<if test="sessionId != null">
+	      		SESSION_ID = #{sessionId}
+	      	</if>
+	      </where>
+	</delete>
+	
+	<insert id="saveHttpSession" parameterMap="dto">
+		INSERT INTO SYS_HTTP_SESSION (SESSION_ID, USER_NAME, CREATE_TIME, LOGIN_IP,USER_ID,EXPLORER) 
+			VALUES (#{sessionId}, #{userName}, #{sessionCreatedTime}, #{loginIP}, #{userId},#{explorer})
+	</insert>
+	
+	<insert id="saveSysException" parameterMap="dto">
+		INSERT INTO SYS_EXCEPTION (EXCEPTION_ID, CLAZZ, METHOD_NAME, EXCEPTION,ACTIVE_TIME) 
+			VALUES (#{EXCEPTION_ID}, #{CLAZZ}, #{METHOD_NAME}, #{EXCEPTION}, #{ACTIVE_TIME})
+	</insert>
+	
+	<select id="countHttpSessionByUserNo" parameterType="String" resultType="Integer">
+		SELECT COUNT(*) FROM SYS_HTTP_SESSION WHERE USER_NO = #{USER_NO}
+	</select>
+</mapper>

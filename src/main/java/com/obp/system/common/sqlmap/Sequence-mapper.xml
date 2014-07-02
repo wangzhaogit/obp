@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Sequence">
+	<resultMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+	<parameterMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+	
+	
+	<select id="searchSysSequenceByTableName"  parameterType="String"
+		resultMap="dto">
+		SELECT SEQUENCE_ID, TABLE_NAME, MAX_ID, REMARK, PATTERN, ID_TYPE, LAST_DATE
+			 FROM SYS_SEQUENCE WHERE TABLE_NAME = #{TABLE_NAME}
+	</select>
+	
+	<insert id="saveSysSequence"  parameterMap="dto">
+		INSERT INTO SYS_SEQUENCE (SEQUENCE_ID, TABLE_NAME, MAX_ID, REMARK, PATTERN, ID_TYPE, LAST_DATE) 
+			VALUES (#{SEQUENCE_ID}, #{TABLE_NAME}, #{MAX_ID}, #{REMARK}, #{PATTERN}, #{ID_TYPE}, #{LAST_DATE})
+	</insert>
+	
+	<update id="updateSysSequence" parameterMap="dto">
+		UPDATE SYS_SEQUENCE
+		<set>
+			<if test="SEQUENCE_ID != null">
+				SEQUENCE_ID = #{SEQUENCE_ID},
+			</if>
+			<if test="MAX_ID != null">
+				MAX_ID = #{MAX_ID},
+			</if>
+			<if test="REMARK != null">
+				REMARK = #{REMARK},
+			</if>
+			<if test="PATTERN != null">
+				PATTERN = #{PATTERN},
+			</if>
+			<if test="ID_TYPE != null">
+				ID_TYPE = #{ID_TYPE},
+			</if>
+			<if test="LAST_DATE != null">
+				LAST_DATE = #{LAST_DATE}
+			</if>
+		</set>
+		WHERE TABLE_NAME = #{TABLE_NAME}
+	</update>
+	
+</mapper>

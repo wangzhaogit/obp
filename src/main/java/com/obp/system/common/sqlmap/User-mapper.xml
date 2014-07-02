@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<resultMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+<!-- 	<resultMap type="UserVO" id="userVo"> -->
+<!-- 		<result property="userId" column="USER_ID"/> -->
+<!-- 		<result property="userNo" column="USER_NO"/> -->
+<!-- 	</resultMap> -->
+	
+	<select id="searchAllSysUser" resultType="list" resultMap="dto">
+		SELECT * FROM SYS_USER
+	</select>
+    
+	<select id="searchSysUserByUserId"  parameterType="long" resultMap="dto">
+		SELECT * FROM SYS_USER WHERE USER_ID = #{USER_ID}
+	</select>
+	
+	<select id="searchSysUserByUserNo"  parameterType="String"
+		resultType="com.obp.system.web.vo.UserInfoVO">
+		SELECT USER_ID AS "userId" , USER_NO AS "userNo", PASSWORD AS "password", USER_NAME AS "userName"
+			 FROM SYS_USER WHERE USER_NO = #{USER_NO}
+	</select>
+	
+</mapper>

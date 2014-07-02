@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Menu">
+	<parameterMap type="com.obp.system.model.metatype.impl.BaseDto" id="paramDto" />
+	<resultMap type="com.obp.system.model.metatype.impl.BaseDto" id="resultDto" />
+	
+	<select id="getCardListBasedSuperAndDeveloper" parameterMap="paramDto" 
+		resultType="com.obp.system.common.entity.MenuVO" resultMap="resultDto">
+		SELECT DISTINCT MENU_ID AS "menuId", MENU_NAME AS "menuName", ICON_CLS AS "iconCls", SORT_NO AS "sortNo"
+			FROM SYS_MENU WHERE LENGTH(MENU_ID) = 4
+		<if test="userType=='2'">
+			AND MENU_TYPE = '1'
+		</if>
+		ORDER BY SORT_NO ASC
+	</select>
+	
+	<select id="getCardList" parameterMap="paramDto" 
+		resultType="com.obp.system.common.entity.MenuVO" resultMap="resultDto">
+		SELECT DISTINCT a.MENU_ID as "menuId", b.MENU_NAME as "menuName", b.ICON_CLS AS "iconCls", b.SORT_NO AS "sortNo"
+		           FROM SYS_ROLE_AUTHORIZE a, SYS_MENU b
+		          WHERE a.AUTHORIZE_LEVEL = '1'
+		            AND a.MENU_ID = b.MENU_ID
+		            AND a.ROLE_ID IN (SELECT ROLE_ID
+		                                 FROM SYS_USER_AUTHORIZE
+		                                WHERE USER_ID = #{userId})
+		ORDER BY b.SORT_NO ASC
+	</select>
+	
+	<select id="getCardListBasedUser" parameterMap="paramDto" 
+		resultType="com.obp.system.common.entity.MenuVO" resultMap="resultDto">
+		SELECT DISTINCT a.MENU_ID as "menuId", b.MENU_NAME as "menuName", b.ICON_CLS AS "iconCls", b.SORT_NO AS "sortNo"
+		           FROM SYS_USER_MENU a, SYS_MENU b
+                  WHERE	a.MENU_ID = b.MENU_ID AND a.USER_ID=#{USER_ID} AND a.AUTHORIZE_LEVEL = '1' 
+               ORDER BY b.SORT_NO ASC           
+	</select>
+	
+	<select id="getCardTreeList" parameterMap="paramDto" 
+		resultType="com.obp.system.common.entity.MenuVO" resultMap="resultDto">
+		SELECT DISTINCT a.MENU_ID as "menuId", b.MENU_NAME as "menuName", b.iconcls,b.parentid,b.request,b.sortno, b.leaf,
+		                b.expanded, a.authorizelevel, b.icon
+		           FROM SYS_ROLE_AUTHORIZE a, SYS_MENU b
+		          WHERE a.AUTHORIZE_LEVEL = '1'
+		            AND a.MENU_ID = b.MENU_ID and a.MENU_ID like '$munuId$%'
+		            AND a.ROLE_ID IN (SELECT ROLE_ID
+		                                 FROM SYS_USER_AUTHORIZE
+		                                WHERE USER_ID = #{userId})
+		       ORDER BY b.SORT_NO ASC
+	</select>
+	
+	<select id="searchSysMenuNameByMenuId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT MENU_NAME FROM SYS_MENU WHERE MENU_ID = #{MENU_ID}
+	</select>
+	
+	
+	
+</mapper>

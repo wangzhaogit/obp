@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 权限数据通用处理  -->
+<mapper namespace="AuthorityDataSupport">
+	<resultMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+	<parameterMap type="com.obp.system.model.metatype.impl.BaseDto" id="dto" />
+	
+	<!-- 查询人员附加信息 -->
+	<select id="searchSysUserSubInfoByUserId" parameterMap="dto" resultMap="dto">
+		SELECT THEME AS 'theme', LAYOUT AS 'layout', BACKGROUND AS 'background'
+			FROM SYS_USER_SUB_INFO
+		  	WHERE USERID = #USERID#
+	</select>
+	
+</mapper>
